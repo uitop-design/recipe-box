@@ -1,5 +1,5 @@
 import { notFound } from "next/navigation";
-import { prisma } from "@/lib/prisma";
+import { getRecipe } from "@/lib/recipes";
 import { IngredientList } from "@/components/IngredientList";
 import { trackView } from "@/lib/views";
 
@@ -7,13 +7,7 @@ export const dynamic = "force-dynamic";
 
 export default async function RecipePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const recipe = await prisma.recipe.findUnique({
-    where: { id },
-    include: {
-      ingredients: { orderBy: { position: "asc" } },
-      tags: { include: { tag: true } },
-    },
-  });
+  const recipe = await getRecipe(id);
   if (!recipe) notFound();
   await trackView(recipe.id);
 

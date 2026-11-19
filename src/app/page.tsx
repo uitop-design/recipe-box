@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { prisma } from "@/lib/prisma";
+import { listRecipes, listTags } from "@/lib/recipes";
 import { RecipeCard } from "@/components/RecipeCard";
 import { SearchBar } from "@/components/SearchBar";
 
@@ -10,18 +10,7 @@ type Search = Promise<{ q?: string; tag?: string }>;
 export default async function HomePage({ searchParams }: { searchParams: Search }) {
   const { q = "", tag = "" } = await searchParams;
 
-  const [recipes, tags] = await Promise.all([
-    prisma.recipe.findMany({
-      where: {
-        ...(q ? { title: { contains: q, mode: "insensitive" as const } } : {}),
-        ...(tag ? { tags: { some: { tag: { name: tag } } } } : {}),
-      },
-      include: { tags: { include: { tag: true } } },
-      orderBy: { createdAt: "desc" },
-      take: 50,
-    }),
-    prisma.tag.findMany({ orderBy: { name: "asc" } }),
-  ]);
+  const [recipes, tags] = await Promise.all([listRecipes({ q, tag }), listTags()]);
 
   return (
     <>

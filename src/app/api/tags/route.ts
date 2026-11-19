@@ -1,11 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { listTags } from "@/lib/recipes";
 
 export async function GET() {
-  const tags = await prisma.tag.findMany({
-    include: { _count: { select: { recipes: true } } },
-    orderBy: { name: "asc" },
-  });
+  const tags = await listTags();
   return NextResponse.json(
     tags.map((t) => ({ id: t.id, name: t.name, recipes: t._count.recipes })),
   );
