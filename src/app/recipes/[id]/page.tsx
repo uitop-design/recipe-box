@@ -1,5 +1,6 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
+import { IngredientList } from "@/components/IngredientList";
 
 export const dynamic = "force-dynamic";
 
@@ -27,15 +28,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
       </div>
 
       <h2>Ingredients</h2>
-      <p className="muted">For {recipe.servings} servings</p>
-      <ul>
-        {recipe.ingredients.map((i) => (
-          <li key={i.id}>
-            {i.quantity ?? ""} {i.unit ?? ""} {i.name}
-            {i.note && <span className="muted"> ({i.note})</span>}
-          </li>
-        ))}
-      </ul>
+      <IngredientList servings={recipe.servings} ingredients={recipe.ingredients} />
 
       <h2>Steps</h2>
       <ol className="steps">

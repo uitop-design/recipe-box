@@ -13,3 +13,5 @@ a { color: inherit; }
 .chip { background: #eef2ff; color: #3730a3; border-radius: 999px; padding: 2px 10px; font-size: 0.8rem; text-decoration: none; }
 .recipe h2 { margin-top: 28px; }
 .steps li { margin-bottom: 8px; line-height: 1.5; }
+.servings { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 8px; }
+.servings button { width: 28px; height: 28px; border-radius: 6px; border: 1px solid #d1d5db; background: #fff; cursor: pointer; }
