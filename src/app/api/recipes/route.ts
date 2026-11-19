@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { cached } from "@/lib/cache";
+import { cached, invalidateSearch, searchKey } from "@/lib/cache";
 import { recipeInput, slugify } from "@/lib/validation";
 
 const SEARCH_TTL = Number(process.env.SEARCH_CACHE_TTL ?? 120);
@@ -8,7 +8,7 @@ const SEARCH_TTL = Number(process.env.SEARCH_CACHE_TTL ?? 120);
 export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get("q")?.trim() ?? "";
   const tag = req.nextUrl.searchParams.get("tag")?.trim().toLowerCase() ?? "";
-  const key = `recipes:search:${q.toLowerCase()}:${tag}`;
+  const key = await searchKey(q, tag);
 
   const recipes = await cached(key, SEARCH_TTL, () =>
     prisma.recipe.findMany({
@@ -42,5 +42,6 @@ export async function POST(req: NextRequest) {
       },
     },
   });
+  await invalidateSearch();
   return NextResponse.json(recipe, { status: 201 });
 }

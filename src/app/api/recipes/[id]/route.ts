@@ -1,6 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { recipeInput } from "@/lib/validation";
+import { invalidateSearch } from "@/lib/cache";
+import { forgetViews } from "@/lib/views";
 
 type Ctx = { params: Promise<{ id: string }> };
 
@@ -43,6 +45,7 @@ export async function PUT(req: NextRequest, { params }: Ctx) {
       },
     });
   });
+  await invalidateSearch();
   return NextResponse.json(recipe);
 }
 
@@ -50,5 +53,6 @@ export async function DELETE(_req: NextRequest, { params }: Ctx) {
   const { id } = await params;
   const deleted = await prisma.recipe.deleteMany({ where: { id } });
   if (deleted.count === 0) return NextResponse.json({ error: "Not found" }, { status: 404 });
+  await Promise.all([invalidateSearch(), forgetViews(id)]);
   return new NextResponse(null, { status: 204 });
 }
