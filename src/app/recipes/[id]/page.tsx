@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { IngredientList } from "@/components/IngredientList";
+import { trackView } from "@/lib/views";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +15,7 @@ export default async function RecipePage({ params }: { params: Promise<{ id: str
     },
   });
   if (!recipe) notFound();
+  await trackView(recipe.id);
 
   return (
     <article className="recipe">
