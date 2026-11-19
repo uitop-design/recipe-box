@@ -15,3 +15,8 @@ a { color: inherit; }
 .steps li { margin-bottom: 8px; line-height: 1.5; }
 .servings { display: inline-flex; align-items: center; gap: 8px; margin-bottom: 8px; }
 .servings button { width: 28px; height: 28px; border-radius: 6px; border: 1px solid #d1d5db; background: #fff; cursor: pointer; }
+.search { display: flex; gap: 8px; margin-bottom: 12px; }
+.search input { flex: 1; padding: 8px 12px; border: 1px solid #d1d5db; border-radius: 8px; font: inherit; }
+.search button { padding: 8px 16px; border: 0; border-radius: 8px; background: #4338ca; color: #fff; cursor: pointer; }
+.tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 20px; }
+.chip.active { background: #4338ca; color: #fff; }
