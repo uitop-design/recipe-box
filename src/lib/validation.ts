@@ -15,7 +15,11 @@ export const recipeInput = z.object({
   cookMinutes: z.number().int().min(0).max(1440).optional(),
   steps: z.array(z.string().trim().min(1)).min(1),
   ingredients: z.array(ingredientInput).min(1),
-  tags: z.array(z.string().trim().toLowerCase().min(1).max(40)).max(10).default([]),
+  tags: z
+    .array(z.string().trim().toLowerCase().min(1).max(40))
+    .max(10)
+    .default([])
+    .transform((tags) => [...new Set(tags)]),
 });
 
 export type RecipeInput = z.infer<typeof recipeInput>;
