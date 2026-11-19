@@ -1,5 +1,6 @@
 import Link from "next/link";
-import { listRecipes, listTags } from "@/lib/recipes";
+import { listRecipes, listTags, popularRecipes } from "@/lib/recipes";
+import { PopularList } from "@/components/PopularList";
 import { RecipeCard } from "@/components/RecipeCard";
 import { SearchBar } from "@/components/SearchBar";
 
@@ -10,12 +11,17 @@ type Search = Promise<{ q?: string; tag?: string }>;
 export default async function HomePage({ searchParams }: { searchParams: Search }) {
   const { q = "", tag = "" } = await searchParams;
 
-  const [recipes, tags] = await Promise.all([listRecipes({ q, tag }), listTags()]);
+  const [recipes, tags, popular] = await Promise.all([
+    listRecipes({ q, tag }),
+    listTags(),
+    popularRecipes(5),
+  ]);
 
   return (
     <>
       <h1>Recipes</h1>
       <SearchBar q={q} tag={tag} />
+      {!q && !tag && <PopularList items={popular} />}
       <nav className="tags">
         <Link href={q ? `/?q=${encodeURIComponent(q)}` : "/"} className={tag ? "chip" : "chip active"}>all</Link>
         {tags.map((t) => (

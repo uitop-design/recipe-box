@@ -25,3 +25,5 @@ a { color: inherit; }
   .container { padding: 16px; }
   .search { flex-direction: column; }
 }
+.popular { background: #fff; border: 1px solid #e5e7eb; border-radius: 10px; padding: 12px 16px; margin-bottom: 20px; }
+.popular h2 { font-size: 1rem; margin: 0 0 8px; }
