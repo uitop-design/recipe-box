@@ -4,8 +4,12 @@ import { recipeInput, slugify } from "@/lib/validation";
 
 export async function GET(req: NextRequest) {
   const q = req.nextUrl.searchParams.get("q")?.trim() ?? "";
+  const tag = req.nextUrl.searchParams.get("tag")?.trim().toLowerCase();
   const recipes = await prisma.recipe.findMany({
-    where: q ? { title: { contains: q, mode: "insensitive" } } : undefined,
+    where: {
+      ...(q ? { title: { contains: q, mode: "insensitive" as const } } : {}),
+      ...(tag ? { tags: { some: { tag: { name: tag } } } } : {}),
+    },
     include: { tags: { include: { tag: true } } },
     orderBy: { createdAt: "desc" },
     take: 50,
