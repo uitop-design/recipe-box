@@ -11,3 +11,5 @@ a { color: inherit; }
 .card-title a { text-decoration: none; }
 .card-meta { display: flex; flex-wrap: wrap; gap: 6px; font-size: 0.85rem; align-items: center; }
 .chip { background: #eef2ff; color: #3730a3; border-radius: 999px; padding: 2px 10px; font-size: 0.8rem; text-decoration: none; }
+.recipe h2 { margin-top: 28px; }
+.steps li { margin-bottom: 8px; line-height: 1.5; }
